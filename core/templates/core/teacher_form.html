@@ -1,0 +1,10 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<h2>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Teacher</h2>
+<form method="post" novalidate>
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn btn-success" type="submit">Save</button>
+  <a class="btn btn-secondary" href="{% url 'teacher_list' %}">Cancel</a>
+</form>
+{% endblock %}

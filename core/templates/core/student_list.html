@@ -1,0 +1,57 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Students</h1>
+  {% if user.is_staff %}
+  <a class="btn btn-primary" href="{% url 'student_create' %}">+ Add Student</a>
+  {% endif %}
+</div>
+
+<!-- Search for everyone -->
+<form method="get" class="mb-3">
+  <input type="text" name="q" placeholder="Search students..." value="{{ request.GET.q }}" class="form-control" style="width: 300px; display: inline-block;">
+  <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Roll</th>
+      <th>Name</th>
+      <th>Course</th>
+      <th>Email</th>
+      <th>Mobile</th>
+      <th>Photo</th>
+      {% if user.is_staff %}
+      <th>Actions</th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for s in students %}
+    <tr>
+      <td>{{ s.roll_no }}</td>
+      <td>{{ s.name }}</td>
+      <td>{{ s.course }}</td>
+      <td>{{ s.email }}</td>
+      <td>{{ s.mobile }}</td>
+      <td>
+        {% if s.photo %}
+          <img src="{{ s.photo.url }}" alt="{{ s.name }}" width="60" class="rounded">
+        {% else %}
+          <span class="text-muted">No Photo</span>
+        {% endif %}
+      </td>
+      {% if user.is_staff %}
+      <td>
+        <a class="btn btn-sm btn-outline-secondary" href="{% url 'student_update' s.id %}">Edit</a>
+        <a class="btn btn-sm btn-danger" href="{% url 'student_delete' s.id %}">Delete</a>
+      </td>
+      {% endif %}
+    </tr>
+    {% empty %}
+    <tr><td colspan="7">No students yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
